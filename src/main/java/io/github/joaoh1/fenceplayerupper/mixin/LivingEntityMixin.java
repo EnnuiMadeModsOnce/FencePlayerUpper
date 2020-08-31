@@ -49,11 +49,12 @@ public abstract class LivingEntityMixin extends Entity {
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction)) ||
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise())) ||
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction)) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction, 2)) ||
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYClockwise())) ||
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYCounterclockwise())) ||
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise()).offset(direction.rotateYClockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise()).offset(direction.rotateYCounterclockwise()))
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise()).offset(direction.rotateYCounterclockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction, 3))
 			) {
 				if (!this.world.isClient) {
 					jumpVelocity -= 0.03F;
