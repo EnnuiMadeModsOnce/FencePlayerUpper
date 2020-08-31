@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,16 +43,17 @@ public abstract class LivingEntityMixin extends Entity {
 		float jumpVelocity = info.getReturnValueF();
 		if (this.getType().isIn(FencePlayerUpperMod.ALLOWED_ENTITIES)) {
 			BlockPos currentPos = this.getBlockPos();
+			Direction direction = this.getMovementDirection();
 			if (
 				FencePlayerUpperMod.canJumpFence(this.world, currentPos) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.north()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.south()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.west()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.east()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.north().west()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.south().west()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.north().east()) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.south().east())
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction)) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction)) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYClockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYCounterclockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise()).offset(direction.rotateYClockwise())) ||
+				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise()).offset(direction.rotateYCounterclockwise()))
 			) {
 				if (!this.world.isClient) {
 					jumpVelocity -= 0.03F;
