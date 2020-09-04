@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.joaoh1.fenceplayerupper;
+package io.github.joaoh1.fenceplayerupper.utils;
 
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
@@ -26,11 +26,36 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FencePlayerUpperMod {
+public class UpperUtils {
 	public static final Tag<Block> BOOST_JUMP = TagRegistry.block(new Identifier("fenceplayerupper", "boost_jump"));
 	public static final Tag<EntityType<?>> ALLOWED_ENTITIES = TagRegistry.entityType(new Identifier("fenceplayerupper", "allowed_entities"));
 
 	public static final boolean canJumpFence(World world, BlockPos pos) {
-		return world.getBlockState(pos).isIn(BOOST_JUMP) && world.getBlockState(pos.up()).isAir();
+		return world.getBlockState(pos).isIn(BOOST_JUMP) && !world.getBlockState(pos).getCollisionShape(world, pos).isEmpty();
+	}
+
+	public static final BlockPos[] createFencePosArray(BlockPos pos, double x, double z) {
+		boolean reduceRange = false;
+		if ((x == 0.75 || x == -0.75) && (z == 0.75 || z == -0.75)) {
+			x = (x / 3 * 4);
+			z = (z / 3 * 4);
+			reduceRange = true;
+		}
+		if (!reduceRange) {
+			return new BlockPos[] {
+				pos,
+				pos.add(x, 0, z),
+				pos.add(x * 2, 0, z * 2),
+				pos.add(x * 3, 0, z * 3),
+				pos.add(-x, 0, -z)
+			};
+		} else {
+			return new BlockPos[] {
+				pos,
+				pos.add(x, 0, z),
+				pos.add(x * 2, 0, z * 2),
+				pos.add(-x, 0, -z)
+			};
+		}
 	}
 }
