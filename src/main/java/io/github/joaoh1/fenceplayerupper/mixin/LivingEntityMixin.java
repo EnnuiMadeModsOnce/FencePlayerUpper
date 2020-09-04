@@ -21,16 +21,22 @@ package io.github.joaoh1.fenceplayerupper.mixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Map;
+
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.joaoh1.fenceplayerupper.FencePlayerUpperMod;
+import io.github.joaoh1.fenceplayerupper.utils.UpperUtils;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -38,29 +44,42 @@ public abstract class LivingEntityMixin extends Entity {
 		super(type, world);
 	}
 
+	@Shadow
+	@Final
+	private Map<StatusEffect, StatusEffectInstance> activeStatusEffects;
+
+	@Shadow
+	public boolean hasStatusEffect(StatusEffect effect) {
+		return this.activeStatusEffects.containsKey(effect);
+	}
+
 	@Inject(at = @At("RETURN"), method = "getJumpVelocity()F", cancellable = true)
 	private float increaseJumpVelocity(CallbackInfoReturnable<Float> info) {
 		float jumpVelocity = info.getReturnValueF();
-		if (this.getType().isIn(FencePlayerUpperMod.ALLOWED_ENTITIES)) {
-			BlockPos currentPos = this.getBlockPos();
-			Direction direction = this.getMovementDirection();
-			if (
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction)) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction, 2)) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYClockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction).offset(direction.rotateYCounterclockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYClockwise()).offset(direction.rotateYClockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction.rotateYCounterclockwise()).offset(direction.rotateYCounterclockwise())) ||
-				FencePlayerUpperMod.canJumpFence(this.world, currentPos.offset(direction, 3))
-			) {
-				if (!this.world.isClient) {
-					jumpVelocity -= 0.03F;
+		if (this.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
+			if (!this.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
+				BlockPos currentPos = this.getBlockPos();
+				BlockPos[] positionsToCheck = new BlockPos[]{
+					currentPos
+				};
+				boolean boostJump = false;
+				positionsToCheck = UpperUtils.createFencePosArray(currentPos, Math.round(this.getRotationVector(0, this.yaw).getX() * 4.0) / 4.0, Math.round(this.getRotationVector(0, this.yaw).getZ() * 4.0) / 4.0);
+				for (int i = 0; i < positionsToCheck.length; i++) {
+					//this.world.addParticle(ParticleTypes.ANGRY_VILLAGER, positionsToCheck[i].getX() + 0.5, positionsToCheck[i].getY() - 0.5, positionsToCheck[i].getZ() + 0.5, 0, 0, 0);
+					if (UpperUtils.canJumpFence(this.world, positionsToCheck[i])) {
+						boostJump = true;
+						break;
+					} else if (!this.world.getBlockState(positionsToCheck[i]).getCollisionShape(this.world, positionsToCheck[i]).isEmpty()) {
+						break;
+					}
 				}
-				this.velocityModified = true;
-				info.setReturnValue(jumpVelocity);
+				if (boostJump) {
+					if (!this.world.isClient) {
+						jumpVelocity -= 0.03F;
+					}
+					this.velocityModified = true;
+					info.setReturnValue(jumpVelocity);
+				}
 			}
 		}
 		return jumpVelocity;
