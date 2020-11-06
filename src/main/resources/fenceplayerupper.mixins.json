@@ -3,7 +3,10 @@
   "package": "io.github.joaoh1.fenceplayerupper.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "LivingEntityMixin"
+    "LandPathNodeMakerMixin",
+    "LivingEntityMixin",
+    "MobNavigationMixin",
+    "MoveControlMixin"
   ],
   "injectors": {
     "defaultRequire": 1
