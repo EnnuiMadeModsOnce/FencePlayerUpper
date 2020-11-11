@@ -9,6 +9,7 @@ import io.github.joaoh1.fenceplayerupper.utils.UpperUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.AbstractBlock.AbstractBlockState;
 import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
@@ -23,7 +24,7 @@ public class MobNavigationMixin {
         boolean returnedValue = cir.getReturnValueZ();
         if (returnedValue == false) {
             Block block = world.getBlockState(pos).getBlock();
-            if (UpperUtils.BOOST_JUMP.contains(block)) {
+            if (UpperUtils.BOOST_JUMP.contains(block) && BlockTags.FENCES.contains(block)) {
                 returnedValue = true;
                 cir.setReturnValue(returnedValue);
             }

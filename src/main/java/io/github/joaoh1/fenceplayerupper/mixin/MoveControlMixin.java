@@ -26,10 +26,8 @@ public class MoveControlMixin {
 
     @Inject(
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
-            shift = At.Shift.BY,
-            by = 2
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"
         ),
         method = "tick()V",
         locals = LocalCapture.CAPTURE_FAILHARD
@@ -37,9 +35,17 @@ public class MoveControlMixin {
     public void ignoreFenceLimitations(CallbackInfo ci, double d, double e, double o, float q, BlockPos blockPos, BlockState blockState) {
         if (this.entity.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
             //if (o > (double)this.entity.stepHeight && d * d + e * e < (double)Math.max(1.0F, this.entity.getWidth())) return;
+            //System.out.println(blockState.getBlock().toString());
             if (blockState.isIn(BlockTags.FENCES) && blockState.isIn(UpperUtils.BOOST_JUMP)) {
                 this.entity.getJumpControl().setActive();
                 this.state = MoveControl.State.JUMPING;
+            } else {
+                BlockPos blockPos2 = this.entity.getBlockPos().offset(this.entity.getHorizontalFacing());
+                BlockState blockState2 = this.entity.world.getBlockState(blockPos2);
+                if (blockState2.isIn(BlockTags.FENCES) && blockState2.isIn(UpperUtils.BOOST_JUMP)) {
+                    this.entity.getJumpControl().setActive();
+                    this.state = MoveControl.State.JUMPING;
+                }
             }
         }
     }
