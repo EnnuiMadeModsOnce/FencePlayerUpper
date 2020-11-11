@@ -24,7 +24,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -79,7 +78,7 @@ public abstract class LivingEntityMixin extends Entity {
 						if (this.getType() == EntityType.PLAYER) {
 							jumpVelocity -= 0.03F;
 						} else {
-							jumpVelocity += 0.05F;
+							jumpVelocity += 0.06F;
 						}
 					}
 					this.velocityModified = true;

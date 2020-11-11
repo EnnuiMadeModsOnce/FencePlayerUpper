@@ -23,7 +23,7 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
 
     @Inject(at = @At("TAIL"), method = "init")
     public void getMobEntity(ChunkCache cachedWorld, MobEntity entity, CallbackInfo ci) {
-        mobEntity = super.entity;
+        mobEntity = this.entity;
     }
 
     @Inject(at = @At("RETURN"), method = "getCommonNodeType", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
