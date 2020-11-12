@@ -59,7 +59,7 @@ public abstract class LivingEntityMixin extends Entity {
 		if (this.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
 			if (!this.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
 				BlockPos currentPos = this.getBlockPos();
-				BlockPos[] positionsToCheck = new BlockPos[]{
+				BlockPos[] positionsToCheck = {
 					currentPos
 				};
 				boolean boostJump = false;
@@ -78,6 +78,7 @@ public abstract class LivingEntityMixin extends Entity {
 						if (this.getType() == EntityType.PLAYER) {
 							jumpVelocity -= 0.03F;
 						} else {
+							System.out.println(jumpVelocity);
 							jumpVelocity += 0.06F;
 						}
 					}

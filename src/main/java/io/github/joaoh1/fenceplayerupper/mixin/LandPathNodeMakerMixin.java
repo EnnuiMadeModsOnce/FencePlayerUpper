@@ -1,3 +1,21 @@
+/*
+ * Fence Player Upper
+ * Copyright (C) 2020 joaoh1
+ *
+ * This program is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package io.github.joaoh1.fenceplayerupper.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,11 +49,9 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
         PathNodeType returnedType = cir.getReturnValue();
         if (mobEntity == null) return returnedType;
         if (mobEntity.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
-            if (blockState.isIn(UpperUtils.BOOST_JUMP) && !blockState.getCollisionShape(blockView, blockPos).isEmpty()) {
-                if (returnedType == PathNodeType.FENCE) {
-                    returnedType = PathNodeType.WALKABLE;
-                    cir.setReturnValue(returnedType);
-                }
+            if (returnedType == PathNodeType.FENCE && blockState.isIn(UpperUtils.BOOST_JUMP)) {
+                returnedType = PathNodeType.WALKABLE;
+                cir.setReturnValue(returnedType);
             }
         }
         return returnedType;
