@@ -1,6 +1,6 @@
 /*
  * Fence Player Upper
- * Copyright (C) 2020 joaoh1
+ * Copyright (C) 2020-2021 joaoh1
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -54,35 +54,36 @@ public abstract class LivingEntityMixin extends Entity {
 	}
 
 	@Inject(at = @At("RETURN"), method = "getJumpVelocity()F", cancellable = true)
-	private float increaseJumpVelocity(CallbackInfoReturnable<Float> info) {
-		float jumpVelocity = info.getReturnValueF();
+	private float increaseJumpVelocity(CallbackInfoReturnable<Float> cir) {
+		float jumpVelocity = cir.getReturnValueF();
 		if (this.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
 			if (!this.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
 				BlockPos currentPos = this.getBlockPos();
-				BlockPos[] positionsToCheck = {
-					currentPos
-				};
+				BlockPos[] positionsToCheck = UpperUtils.createFencePosArray(
+					currentPos,
+					Math.round(this.getRotationVector(0, this.yaw).getX() * 4.0) / 4.0,
+					Math.round(this.getRotationVector(0, this.yaw).getZ() * 4.0) / 4.0
+				);
 				boolean boostJump = false;
-				positionsToCheck = UpperUtils.createFencePosArray(currentPos, Math.round(this.getRotationVector(0, this.yaw).getX() * 4.0) / 4.0, Math.round(this.getRotationVector(0, this.yaw).getZ() * 4.0) / 4.0);
-				for (int i = 0; i < positionsToCheck.length; i++) {
-					//this.world.addParticle(ParticleTypes.ANGRY_VILLAGER, positionsToCheck[i].getX() + 0.5, positionsToCheck[i].getY() - 0.5, positionsToCheck[i].getZ() + 0.5, 0, 0, 0);
-					if (UpperUtils.canJumpFence(this.world, positionsToCheck[i])) {
+				for (BlockPos blockPos : positionsToCheck) {
+					//this.world.addParticle(ParticleTypes.ANGRY_VILLAGER, blockPos.getX() + 0.5, blockPos.getY() - 0.5, blockPos.getZ() + 0.5, 0, 0, 0);
+					if (UpperUtils.canJumpFence(this.world, blockPos)) {
 						boostJump = true;
 						break;
-					} else if (!this.world.getBlockState(positionsToCheck[i]).getCollisionShape(this.world, positionsToCheck[i]).isEmpty()) {
+					} else if (!this.world.getBlockState(blockPos).getCollisionShape(this.world, blockPos).isEmpty()) {
 						break;
 					}
 				}
 				if (boostJump) {
 					if (!this.world.isClient) {
-						if (this.getType() == EntityType.PLAYER) {
+						if (this.isPlayer()) {
 							jumpVelocity -= 0.03F;
 						} else {
 							jumpVelocity += 0.06F;
 						}
 					}
 					this.velocityModified = true;
-					info.setReturnValue(jumpVelocity);
+					cir.setReturnValue(jumpVelocity);
 				}
 			}
 		}

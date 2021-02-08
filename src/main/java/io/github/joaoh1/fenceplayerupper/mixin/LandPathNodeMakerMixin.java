@@ -1,6 +1,6 @@
 /*
  * Fence Player Upper
- * Copyright (C) 2020 joaoh1
+ * Copyright (C) 2020-2021 joaoh1
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -47,13 +47,14 @@ public abstract class LandPathNodeMakerMixin extends PathNodeMaker {
     @Inject(at = @At("RETURN"), method = "getCommonNodeType", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private static PathNodeType getCommonNodeTypeMixin(BlockView blockView, BlockPos blockPos, CallbackInfoReturnable<PathNodeType> cir, BlockState blockState) {
         PathNodeType returnedType = cir.getReturnValue();
-        if (mobEntity == null) return returnedType;
-        if (mobEntity.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
-            if (returnedType == PathNodeType.FENCE && blockState.isIn(UpperUtils.BOOST_JUMP)) {
-                returnedType = PathNodeType.WALKABLE;
-                cir.setReturnValue(returnedType);
+        if (mobEntity != null && returnedType == PathNodeType.FENCE) {
+            if (mobEntity.getType().isIn(UpperUtils.ALLOWED_ENTITIES)) {
+                if (blockState.isIn(UpperUtils.BOOST_JUMP)) {
+                    returnedType = PathNodeType.WALKABLE;
+                    cir.setReturnValue(returnedType);
+                }
             }
         }
         return returnedType;
-    } 
+    }
 }

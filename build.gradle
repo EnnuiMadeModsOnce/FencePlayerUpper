@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.6-SNAPSHOT'
 	id 'maven-publish'
 	id 'org.cadixdev.licenser' version '0.5.0'
 }
@@ -50,6 +50,9 @@ tasks.withType(JavaCompile).configureEach {
 	def targetVersion = 8
 	if (JavaVersion.current().isJava9Compatible()) {
 		 it.options.release = targetVersion
+	} else {
+		 it.sourceCompatibility = JavaVersion.toVersion(targetVersion)
+		 it.targetCompatibility = JavaVersion.toVersion(targetVersion)
 	}
 }
 
