@@ -76,7 +76,7 @@ public abstract class LivingEntityMixin extends Entity {
 				}
 				if (boostJump) {
 					if (!this.world.isClient) {
-						if (this.isPlayer()) {
+						if (this.getType() == EntityType.PLAYER) {
 							jumpVelocity -= 0.03F;
 						} else {
 							jumpVelocity += 0.06F;
