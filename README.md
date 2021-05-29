@@ -9,6 +9,7 @@ A very simple mod that allows players to jump on walls and fences. The blocks wh
 This mod is available for download on the following services:
 
 - [CurseForge (recommended)](https://www.curseforge.com/minecraft/mc-mods/fenceplayerupper)
+- [Modrinth (WIP alternative)](https://modrinth.com/mod/fence-player-upper)
 - [GitHub Releases (alternative)](https://github.com/joaoh1/FencePlayerUpper)
 
 ## License
