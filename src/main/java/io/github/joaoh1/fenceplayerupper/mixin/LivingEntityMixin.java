@@ -1,6 +1,6 @@
 /*
  * Fence Player Upper
- * Copyright (C) 2020-2021 joaoh1
+ * Copyright (C) 2020-2021 boredomh1
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -61,8 +61,8 @@ public abstract class LivingEntityMixin extends Entity {
 				BlockPos currentPos = this.getBlockPos();
 				BlockPos[] positionsToCheck = UpperUtils.createFencePosArray(
 					currentPos,
-					Math.round(this.getRotationVector(0, this.yaw).getX() * 4.0) / 4.0,
-					Math.round(this.getRotationVector(0, this.yaw).getZ() * 4.0) / 4.0
+					Math.round(this.getRotationVector(0, this.getYaw()).getX() * 4.0) / 4.0,
+					Math.round(this.getRotationVector(0, this.getYaw()).getZ() * 4.0) / 4.0
 				);
 				boolean boostJump = false;
 				for (BlockPos blockPos : positionsToCheck) {

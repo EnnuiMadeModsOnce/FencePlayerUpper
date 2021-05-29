@@ -5,7 +5,7 @@
   "name": "Fence Player Upper",
   "description": "Yet another mod that allows for jumping over fences and walls. Configurable through tags and doesn't require the client!",
   "authors": [
-    "joaoh1"
+    "boredomh1"
   ],
   "contact": {
     "homepage": "https://curseforge.com/minecraft/mc-mods/fenceplayerupper",
@@ -15,11 +15,12 @@
   "license": "LGPL-3.0",
   "icon": "assets/fenceplayerupper/icon.png",
   "environment": "*",
+  "accessWidener": "fenceplayerupper.accesswidener",
   "mixins": [
     "fenceplayerupper.mixins.json"
   ],
   "depends": {
-    "fabricloader": "*",
+    "fabricloader": ">=0.11.3",
     "fabric": "*"
   }
 }
