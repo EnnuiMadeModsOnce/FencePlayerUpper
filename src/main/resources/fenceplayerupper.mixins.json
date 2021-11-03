@@ -3,9 +3,7 @@
   "package": "io.github.ennuil.fenceplayerupper.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "LandPathNodeMakerMixin",
-    "LivingEntityMixin",
-    "MoveControlMixin"
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
