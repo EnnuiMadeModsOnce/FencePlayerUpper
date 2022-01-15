@@ -1,14 +1,14 @@
 plugins {
 	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
-	id "org.quiltmc.quilt-mappings-on-loom" version '3.1.1'
+	id "org.quiltmc.quilt-mappings-on-loom" version '3.1.2'
 	id 'maven-publish'
 }
 
 // Visual Studio Code completely ignores options.release.
 // So, we still have those two.
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = System.env.GITHUB_ACTIONS == "true"
@@ -29,10 +29,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/fenceplayerupper.accesswidener")
 }
 
 processResources {
