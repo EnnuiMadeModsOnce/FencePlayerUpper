@@ -13,7 +13,6 @@
   "license": "MIT",
   "icon": "assets/fenceplayerupper/icon.png",
   "environment": "*",
-  "accessWidener": "fenceplayerupper.accesswidener",
   "mixins": [
     "fenceplayerupper.mixins.json"
   ],
