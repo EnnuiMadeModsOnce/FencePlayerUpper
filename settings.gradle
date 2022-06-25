@@ -10,7 +10,7 @@ pluginManagement {
         }
         maven {
             name = 'Quilt'
-            url = 'https://maven.quiltmc.org/repository/release'
+            url = 'https://maven.quiltmc.org/repository/release/'
         }
         gradlePluginPortal()
     }
