@@ -1,18 +1,18 @@
 package io.github.ennuil.fenceplayerupper.utils;
 
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class UpperUtils {
-	public static final Tag<Block> BOOST_JUMP = TagFactory.BLOCK.create(new Identifier("fenceplayerupper", "boost_jump"));
+	public static final TagKey<Block> BOOST_JUMP = TagKey.of(Registry.BLOCK_KEY, new Identifier("fenceplayerupper", "boost_jump"));
 
 	public static final boolean canJumpFence(World world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
